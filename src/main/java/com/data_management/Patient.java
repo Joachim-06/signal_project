@@ -55,7 +55,7 @@ public class Patient {
         // TODO Implement and test this method
         List<PatientRecord> newPatientRecords = new ArrayList<>();
         for( PatientRecord record : this.patientRecords) {
-            if ((record.timestamp >= startTime) && (record.timestamp <= endTime)) {
+            if ((record.getTimestamp() >= startTime) && (record.getTimestamp() <= endTime)) {
                 newPatientRecords.add(record);
             }
         }
