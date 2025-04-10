@@ -14,7 +14,7 @@ import java.util.ArrayList;
 class DataStorageTest {
     
     @Test
-    void testAddAndGetRecords() {
+    void testAddAndGetRecords()  throws IOException {
         // TODO Perhaps you can implement a mock data reader to mock the test data?
         // DataReader reader
         DataReader reader = new DataReader() {
