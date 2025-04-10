@@ -4,6 +4,9 @@ import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
 
+/**
+ * Simulates the triggering and resolution of alerts for patients.
+ */
 public class AlertGenerator implements PatientDataGenerator {
 
     // Changed variable name to UPPER_SNAKE_CASE
@@ -12,10 +15,21 @@ public class AlertGenerator implements PatientDataGenerator {
     // Changed variable name to lowerCamelCase
     private boolean[] alertStates; // false = resolved, true = pressed
 
+    /**
+     * Constructs the alertgenerator based on given patientCount
+     *
+     * @param patientCount The amount of patients
+     */
     public AlertGenerator(int patientCount) {
         alertStates = new boolean[patientCount + 1];
     }
 
+    /**
+     * Generates and outputs alerts for a specific patient
+     *
+     * @param patientId The Id of the patient
+     * @param outputStrategy Strategy used to output the generated data
+     */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {
