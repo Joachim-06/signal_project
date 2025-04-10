@@ -11,11 +11,17 @@ import java.util.ArrayList;
 
 class DataStorageTest {
 
+    private DataReader reader;
+
+    public DataStorage(DataReader reader) {
+        this.reader = reader;
+    }
+    
     @Test
     void testAddAndGetRecords() {
         // TODO Perhaps you can implement a mock data reader to mock the test data?
         // DataReader reader
-        DataReader reader = new DataReader() {
+        DataReader reader2 = new DataReader() {
             @Override
             public List<PatientRecord> readData() {
                 // return some mock test data
@@ -24,7 +30,7 @@ class DataStorageTest {
                 return mockRecords;
             }
         };
-        DataStorage storage = new DataStorage(reader);
+        DataStorage storage = new DataStorage(reader2);
         storage.addPatientData(1, 100.0, "WhiteBloodCells", 1714376789050L);
         storage.addPatientData(1, 200.0, "WhiteBloodCells", 1714376789051L);
 
