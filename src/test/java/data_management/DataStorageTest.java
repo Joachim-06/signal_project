@@ -3,8 +3,10 @@ package data_management;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import com.data_management.DataStorage;
 import com.data_management.PatientRecord;
+import com.data_management.DataReader;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -16,12 +18,27 @@ class DataStorageTest {
         // TODO Perhaps you can implement a mock data reader to mock the test data?
         // DataReader reader
         DataReader reader = new DataReader() {
-            @Override
-            public List<PatientRecord> readData() {
-                // return some mock test data
+            public List<PatientRecord> mockRecords() {
                 List<PatientRecord> mockRecords = new ArrayList<>();
                 mockRecords.add(new PatientRecord(1, 100.0, "WhiteBloodCells", 1714376789050L));
                 return mockRecords;
+            }
+
+            @Override
+            public void readData(DataStorage dataStorage) throws IOException {
+                try {
+                    List<PatientRecord> records = mockRecords();
+                    for (PatientRecord record : records) {
+                        dataStorage.addPatientData(
+                            record.getPatientId(),
+                            record.getMeasurementValue(),
+                            record.getMeasurementType(),
+                            record.getTimestamp()
+                        );
+                    }
+                } catch (Exception e) {
+                    throw new IOException("Failed to read and store data", e);
+                }
             }
         };
         DataStorage storage = new DataStorage(reader);
