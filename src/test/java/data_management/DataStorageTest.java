@@ -32,7 +32,7 @@ class DataStorageTest {
                         dataStorage.addPatientData(
                             record.getPatientId(),
                             record.getMeasurementValue(),
-                            record.getMeasurementType(),
+                            record.getRecordType(),
                             record.getTimestamp()
                         );
                     }
