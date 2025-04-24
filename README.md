@@ -64,5 +64,10 @@ java -jar target/cardio_generator-1.0-SNAPSHOT.jar --patient-count 100 --output 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## UML models:
+
+This project contains uml models that describe some key systems. These models are accessible via the following
+link https://github.com/Joachim-06/signal_project/tree/master/uml_models.
+
 ## Project member:
 - Student ID: 6402934
