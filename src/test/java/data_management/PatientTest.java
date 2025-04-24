@@ -21,7 +21,16 @@ public class PatientTest {
         patient.addRecord(108, "HeartRate", 20000);
 
 
-        List<PatientRecord> records = patient.getRecords(11000, 18000);
-        assertEquals(3, records.size());
+        List<PatientRecord> records1 = patient.getRecords(11000, 18000);
+        List<PatientRecord> records2 = patient.getRecords(0000, 5000);
+        List<PatientRecord> records3 = patient.getRecords(20000, 21000);
+        List<PatientRecord> records4 = patient.getRecords(20000, 20000);
+
+
+        assertEquals(3, records1.size());
+        assertEquals(0, records2.size());
+        assertEquals(1, records3.size());
+        assertEquals(1, records4.size());
+
     }
 }

@@ -12,6 +12,12 @@ import java.util.List;
 public class Patient {
     private int patientId;
     private List<PatientRecord> patientRecords;
+    private PatientRecord[] lastBloodPressureRecords = new PatientRecord[3];
+    private PatientRecord lastBloodSaturationRecord;
+    private PatientRecord lastECGRecord;
+    private int numberECGRecords;
+    private int totalECGRecords;
+
 
     /**
      * Constructs a new Patient with a specified ID.
@@ -38,6 +44,21 @@ public class Patient {
     public void addRecord(double measurementValue, String recordType, long timestamp) {
         PatientRecord record = new PatientRecord(this.patientId, measurementValue, recordType, timestamp);
         this.patientRecords.add(record);
+        switch (record.getRecordType()) {
+            case "BloodPressure":
+                changeOrderList(record, lastBloodPressureRecords);
+                break;
+            case "BloodSaturation":
+                lastBloodSaturationRecord = record;
+                break;
+            case "ECG":
+                lastECGRecord = record;
+                totalECGRecords+=record.getMeasurementValue();
+                numberECGRecords++;
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -61,5 +82,28 @@ public class Patient {
         }
 
         return newPatientRecords;
+    }
+
+    public PatientRecord[] getlastBloodPressureRecords() {
+        return lastBloodPressureRecords;
+    }
+
+    public PatientRecord getlastBloodSaturationRecord() {
+        return lastBloodSaturationRecord;
+    }
+
+    public PatientRecord getlastECGRecord() {
+        return lastECGRecord;
+    }
+
+    public double getAverageECG() {
+        return totalECGRecords/numberECGRecords;
+    }
+
+    private void changeOrderList(PatientRecord newRecord, PatientRecord[] records) {
+        for(int i=0; i<records.length; i++){
+            records[i] = records[i+1];
+        }
+        records[records.length-1] = newRecord;
     }
 }
