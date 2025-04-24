@@ -2,6 +2,7 @@ package com.alerts;
 
 import com.data_management.DataStorage;
 import com.data_management.Patient;
+import com.data_management.PatientRecord;
 
 /**
  * The {@code AlertGenerator} class is responsible for monitoring patient data
@@ -36,6 +37,26 @@ public class AlertGenerator {
      */
     public void evaluateData(Patient patient) {
         // Implementation goes here
+        PatientRecord record = Patient.getLastRecord();
+        switch (record.getRecordType()) {
+            case "BloodPressure":
+                if(record.getMeasurementValue() > 140 || record.getMeasurementValue() < 60) {
+                    Alert alert = new Alert(""+record.getPatientId(), "critical blood pressure readings", System.currentTimeMillis());
+                    triggerAlert(alert);
+                }
+                break;
+            
+            case "HeartRate":
+                if(record.getMeasurementValue() > 100 || record.getMeasurementValue() < 60) {
+                    Alert alert = new Alert(""+record.getPatientId(), "abnormal heart rate", System.currentTimeMillis());
+                    triggerAlert(alert);
+                }
+                break;
+        
+            default:
+                break;
+        }
+        
     }
 
     /**
@@ -48,5 +69,7 @@ public class AlertGenerator {
      */
     private void triggerAlert(Alert alert) {
         // Implementation might involve logging the alert or notifying staff
+        //System.out.println("Patient: " + alert.getPatientId() + " had following condition: " + alert.getCondition() + ", at time: "+ alert.getTimestamp() + ".");
+        System.out.println(alert.getCondition());
     }
 }
