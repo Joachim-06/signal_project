@@ -44,39 +44,38 @@ public class AlertGenerator {
         PatientRecord lastECGRecord = patient.getlastECGRecord();
 
         //____________________Blood pressure alerts_________________
-        if(lastBloodPressureRecord.getMeasurementValue() > 120 || lastBloodPressureRecord.getMeasurementValue() < 60) {
+        if(lastBloodPressureRecord!=null && (lastBloodPressureRecord.getMeasurementValue() > 120 || lastBloodPressureRecord.getMeasurementValue() < 60)) {
             // blood pressure is lower than 60 or higher than 120
             Alert alert = new Alert(""+lastBloodPressureRecord.getPatientId(), "Blood Pressure Alert", System.currentTimeMillis());
             triggerAlert(alert);
-        } else if (lastBloodPressureRecords[0].getMeasurementValue()-10>=lastBloodPressureRecords[1].getMeasurementValue()
-                        && lastBloodPressureRecords[1].getMeasurementValue()-10>=lastBloodPressureRecords[2].getMeasurementValue()) {
-            // blood pressure is decreasing very rapidely (by 10 or more each time)
-            Alert alert = new Alert(""+lastBloodPressureRecord.getPatientId(), "Blood Pressure Alert", System.currentTimeMillis());
-            triggerAlert(alert);
-        } else if (lastBloodPressureRecords[0].getMeasurementValue()+10<=lastBloodPressureRecords[1].getMeasurementValue()
-                        && lastBloodPressureRecords[1].getMeasurementValue()+10<=lastBloodPressureRecords[2].getMeasurementValue()) {
-            // blood pressure is increasing very rapidely (by 10 or more each time)
-            Alert alert = new Alert(""+lastBloodPressureRecord.getPatientId(), "Blood Pressure Alert", System.currentTimeMillis());
-            triggerAlert(alert);
+        } 
+        if(lastBloodPressureRecords[0]!=null && lastBloodPressureRecords[1]!=null && lastBloodPressureRecords[2]!=null) {
+            if (lastBloodPressureRecords[0].getMeasurementValue()-10>=lastBloodPressureRecords[1].getMeasurementValue()
+                    && lastBloodPressureRecords[1].getMeasurementValue()-10>=lastBloodPressureRecords[2].getMeasurementValue()) {
+                // blood pressure is decreasing very rapidly (by 10 or more each time)
+                Alert alert = new Alert(""+lastBloodPressureRecord.getPatientId(), "Blood Pressure Alert", System.currentTimeMillis());
+                triggerAlert(alert);
+                } else if (lastBloodPressureRecords[0].getMeasurementValue()+10<=lastBloodPressureRecords[1].getMeasurementValue()
+                            && lastBloodPressureRecords[1].getMeasurementValue()+10<=lastBloodPressureRecords[2].getMeasurementValue()) {
+                // blood pressure is increasing very rapidly (by 10 or more each time)
+                Alert alert = new Alert(""+lastBloodPressureRecord.getPatientId(), "Blood Pressure Alert", System.currentTimeMillis());
+                triggerAlert(alert);
+            }
         }
 
-        //___________________Blood saturation alerts________________
-        if(lastBloodSaturationRecord.getMeasurementValue()<0.92) {
-            Alert alert = new Alert(""+lastBloodPressureRecord.getPatientId(), "Blood Saturation Alert", System.currentTimeMillis());
-            triggerAlert(alert);
-        }
-
-
-        //_______________________Combined alerts____________________
-        if(lastBloodSaturationRecord.getMeasurementValue()<0.92 && lastBloodPressureRecord.getMeasurementValue()<90) {
+        //_________Blood saturation alerts and Combined alerts_____
+        if(lastBloodPressureRecord!=null && lastBloodSaturationRecord!=null && lastBloodSaturationRecord.getMeasurementValue()<0.92 && lastBloodPressureRecord.getMeasurementValue()<90) {
             Alert alert = new Alert(""+lastBloodPressureRecord.getPatientId(), "Hypotensive Hypoxemia Alert", System.currentTimeMillis());
+            triggerAlert(alert);
+        } else if(lastBloodSaturationRecord != null && lastBloodSaturationRecord.getMeasurementValue()<0.92) {
+            Alert alert = new Alert(""+lastBloodSaturationRecord.getPatientId(), "Blood Saturation Alert", System.currentTimeMillis());
             triggerAlert(alert);
         }
 
 
         //_________________________ECG alerts_______________________
-        if (lastECGRecord.getMeasurementValue()-40 >= patient.getAverageECG()){
-            Alert alert = new Alert(""+lastBloodPressureRecord.getPatientId(), "ECG Alert", System.currentTimeMillis());
+        if (lastECGRecord != null && lastECGRecord.getMeasurementValue()-40 >= patient.getAverageECG()){
+            Alert alert = new Alert(""+lastECGRecord.getPatientId(), "ECG Alert", System.currentTimeMillis());
             triggerAlert(alert); 
         }
         
@@ -92,7 +91,7 @@ public class AlertGenerator {
      */
     private void triggerAlert(Alert alert) {
         // Implementation might involve logging the alert or notifying staff
-        System.out.println("Patient: " + alert.getPatientId() + " had following condition: " + alert.getCondition() + ", at time: "+ alert.getTimestamp() + ".");
-        //System.out.println(alert.getCondition());
+        //System.out.println("Patient: " + alert.getPatientId() + " had following condition: " + alert.getCondition() + ", at time: "+ alert.getTimestamp() + ".");
+        System.out.println(alert.getCondition());
     }
 }

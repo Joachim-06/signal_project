@@ -97,11 +97,12 @@ public class Patient {
     }
 
     public double getAverageECG() {
-        return totalECGRecords/numberECGRecords;
+        return (totalECGRecords-lastECGRecord.getMeasurementValue())/(numberECGRecords-1);
     }
 
     private void changeOrderList(PatientRecord newRecord, PatientRecord[] records) {
-        for(int i=0; i<records.length; i++){
+        for(int i=0; i<records.length-1; i++){
+
             records[i] = records[i+1];
         }
         records[records.length-1] = newRecord;
