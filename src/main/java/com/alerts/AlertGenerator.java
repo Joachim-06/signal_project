@@ -37,7 +37,6 @@ public class AlertGenerator {
      * @param patient the patient data to evaluate for alert conditions
      */
     public void evaluateData(Patient patient) {
-        // Implementation goes here
 
         PatientRecord[] lastBloodPressureRecords = patient.getlastBloodPressureRecords();
         PatientRecord lastBloodPressureRecord = lastBloodPressureRecords[lastBloodPressureRecords.length-1];
@@ -45,48 +44,36 @@ public class AlertGenerator {
         PatientRecord lastECGRecord = patient.getlastECGRecord();
 
         //____________________Blood pressure alerts_________________
-        alertFactory = new BloodPressureAlertFactory();
 
-        if(lastBloodPressureRecord!=null && (lastBloodPressureRecord.getMeasurementValue() > 120 || lastBloodPressureRecord.getMeasurementValue() < 60)) {
-            // blood pressure is lower than 60 or higher than 120
-            Alert alert = alertFactory.createAlert(""+lastBloodPressureRecord.getPatientId(), "Blood Pressure Alert", System.currentTimeMillis());
-            triggerAlert(alert);
-        } 
-        if(lastBloodPressureRecords[0]!=null && lastBloodPressureRecords[1]!=null && lastBloodPressureRecords[2]!=null) {
-        
-            if (lastBloodPressureRecords[0].getMeasurementValue()-10>=lastBloodPressureRecords[1].getMeasurementValue()
-                    && lastBloodPressureRecords[1].getMeasurementValue()-10>=lastBloodPressureRecords[2].getMeasurementValue()) {
-                // blood pressure is decreasing very rapidly (by 10 or more each time)
-                Alert alert = alertFactory.createAlert(""+lastBloodPressureRecord.getPatientId(), "Blood Pressure Alert", System.currentTimeMillis());
-                triggerAlert(alert);
-                } else if (lastBloodPressureRecords[0].getMeasurementValue()+10<=lastBloodPressureRecords[1].getMeasurementValue()
-                            && lastBloodPressureRecords[1].getMeasurementValue()+10<=lastBloodPressureRecords[2].getMeasurementValue()) {
-                // blood pressure is increasing very rapidly (by 10 or more each time)
-                Alert alert = alertFactory.createAlert(""+lastBloodPressureRecord.getPatientId(), "Blood Pressure Alert", System.currentTimeMillis());
+        BloodPressureStrategy bloodPressureStrategy = new BloodPressureStrategy(lastBloodPressureRecord, lastBloodPressureRecords);
+        Alert[] bloodPressureAlert = bloodPressureStrategy.checkAlert();
+        // checks if bloodPressureStrategy.checkAlert() found an alert
+        // if yes => alert is triggered
+        for (Alert alert: bloodPressureAlert) {
+            if (alert!=null) {
                 triggerAlert(alert);
             }
         }
 
         //_________Blood saturation alerts and Combined alerts_____
-        alertFactory = new BloodOxygenAlertFactory();
 
-        if(lastBloodPressureRecord!=null && lastBloodSaturationRecord!=null && lastBloodSaturationRecord.getMeasurementValue()<0.92 && lastBloodPressureRecord.getMeasurementValue()<90) {
-            Alert alert = alertFactory.createAlert(""+lastBloodPressureRecord.getPatientId(), "Hypotensive Hypoxemia Alert", System.currentTimeMillis());
-            triggerAlert(alert);
-        } else if(lastBloodSaturationRecord != null && lastBloodSaturationRecord.getMeasurementValue()<0.92) {
-            Alert alert = alertFactory.createAlert(""+lastBloodSaturationRecord.getPatientId(), "Blood Saturation Alert", System.currentTimeMillis());
-            triggerAlert(alert);
+        OxygenSaturationStrategy oxygenSaturationStrategy = new OxygenSaturationStrategy(lastBloodSaturationRecord, lastBloodPressureRecord);
+        Alert bloodOxygenAlert = oxygenSaturationStrategy.checkAlert()[0];
+        // checks if oxygenSaturationStrategy.checkAlert() found an alert
+        // if yes => alert is triggered
+        if (bloodOxygenAlert!=null) {
+            triggerAlert(bloodOxygenAlert);
         }
-
 
         //_________________________ECG alerts_______________________
-        alertFactory = new ECGAlertFactory();
         
-        if (lastECGRecord != null && lastECGRecord.getMeasurementValue()-40 >= patient.getAverageECG()){
-            Alert alert = alertFactory.createAlert(""+lastECGRecord.getPatientId(), "ECG Alert", System.currentTimeMillis());
-            triggerAlert(alert); 
+        HeartRateStrategy heartRateStrategy = new HeartRateStrategy(lastECGRecord, patient.getAverageECG());
+        Alert ecgAlert = heartRateStrategy.checkAlert()[0];
+        // checks if heartRateStrategy.checkAlert() found an alert
+        // if yes => alert is triggered
+        if (ecgAlert!=null) {
+            triggerAlert(ecgAlert);
         }
-        
     }
 
     /**

@@ -97,6 +97,9 @@ public class Patient {
     }
 
     public double getAverageECG() {
+        if (numberECGRecords == 0 || numberECGRecords == 1) {
+            return 80;
+        } 
         return (totalECGRecords-lastECGRecord.getMeasurementValue())/(numberECGRecords-1);
     }
 
