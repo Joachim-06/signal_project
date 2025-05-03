@@ -14,6 +14,14 @@ import java.util.ArrayList;
 class DataStorageTest {
     
     @Test
+    public void testSingletonDataStorage() {
+        DataStorage dataStorage1 = DataStorage.getInstance();
+        DataStorage dataStorage2 = DataStorage.getInstance();
+
+        assertSame(dataStorage1, dataStorage2);
+    }
+
+    @Test
     void testAddAndGetRecords()  throws IOException {
         // TODO Perhaps you can implement a mock data reader to mock the test data?
         // DataReader reader
@@ -41,7 +49,7 @@ class DataStorageTest {
                 }
             }
         };
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         reader.readData(storage);
         
         storage.addPatientData(1, 200.0, "WhiteBloodCells", 1714376789051L);

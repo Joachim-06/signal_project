@@ -19,7 +19,7 @@ public class AlertGeneratorTest {
         System.setOut(new PrintStream(outputStream));
 
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         AlertGenerator generator = new AlertGenerator(storage);
         Patient patient = new Patient(1);
 
@@ -42,7 +42,7 @@ public class AlertGeneratorTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         AlertGenerator generator = new AlertGenerator(storage);
         Patient patient = new Patient(1);
 
@@ -62,7 +62,7 @@ public class AlertGeneratorTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         AlertGenerator generator = new AlertGenerator(storage);
         Patient patient = new Patient(1);
 
@@ -82,7 +82,7 @@ public class AlertGeneratorTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         AlertGenerator generator = new AlertGenerator(storage);
         Patient patient = new Patient(1);
 
@@ -103,7 +103,7 @@ public class AlertGeneratorTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         AlertGenerator generator = new AlertGenerator(storage);
         Patient patient = new Patient(1);
 
