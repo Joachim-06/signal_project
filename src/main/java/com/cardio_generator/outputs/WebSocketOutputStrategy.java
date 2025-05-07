@@ -13,6 +13,15 @@ public class WebSocketOutputStrategy implements OutputStrategy {
         server = new SimpleWebSocketServer(new InetSocketAddress(port));
         System.out.println("WebSocket server created on port: " + port + ", listening for connections...");
         server.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                System.out.println("Shutting down WebSocket server...");
+                server.stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }));
     }
 
     @Override
@@ -27,7 +36,7 @@ public class WebSocketOutputStrategy implements OutputStrategy {
                 data = "1";
             }
         }
-        String message = String.format("%d,%d,%s,%s", patientId, timestamp, label, 2);
+        String message = String.format("%d,%d,%s,%s", patientId, timestamp, label, data);
         // Broadcast the message to all connected clients
         for (WebSocket conn : server.getConnections()) {
             conn.send(message);
