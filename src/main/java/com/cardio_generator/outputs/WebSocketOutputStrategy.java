@@ -17,7 +17,17 @@ public class WebSocketOutputStrategy implements OutputStrategy {
 
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
-        String message = String.format("%d,%d,%s,%s", patientId, timestamp, label, data);
+        if (label.equals("Saturation")) {
+            double temp = Double.parseDouble(data.replace("%", ""))/100;
+            data = String.valueOf(temp);
+        } else if (label.equals("Alert")) {
+            if (data.equals("triggered")) {
+                data = "0";
+            } else {
+                data = "1";
+            }
+        }
+        String message = String.format("%d,%d,%s,%s", patientId, timestamp, label, 2);
         // Broadcast the message to all connected clients
         for (WebSocket conn : server.getConnections()) {
             conn.send(message);
