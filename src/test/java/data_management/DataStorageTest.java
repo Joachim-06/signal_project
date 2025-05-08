@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import com.data_management.DataStorage;
+import com.data_management.MessageDataReader;
 import com.data_management.PatientRecord;
 import com.data_management.DataReader;
 
@@ -20,37 +21,16 @@ class DataStorageTest {
 
         assertSame(dataStorage1, dataStorage2);
     }
-
+    
+     
     @Test
     void testAddAndGetRecords()  throws IOException {
         // TODO Perhaps you can implement a mock data reader to mock the test data?
         // DataReader reader
-        DataReader reader = new DataReader() {
-            public List<PatientRecord> mockRecords() {
-                List<PatientRecord> mockRecords = new ArrayList<>();
-                mockRecords.add(new PatientRecord(1, 100.0, "WhiteBloodCells", 1714376789050L));
-                return mockRecords;
-            }
-
-            @Override
-            public void readData(DataStorage dataStorage) throws IOException {
-                try {
-                    List<PatientRecord> records = mockRecords();
-                    for (PatientRecord record : records) {
-                        dataStorage.addPatientData(
-                            record.getPatientId(),
-                            record.getMeasurementValue(),
-                            record.getRecordType(),
-                            record.getTimestamp()
-                        );
-                    }
-                } catch (Exception e) {
-                    throw new IOException("Failed to read and store data", e);
-                }
-            }
-        };
+        
         DataStorage storage = DataStorage.getInstance();
-        reader.readData(storage);
+        DataReader reader = new MessageDataReader(storage);
+        reader.readData("1, 1714376789050, WhiteBloodCells, 100.0");
         
         storage.addPatientData(1, 200.0, "WhiteBloodCells", 1714376789051L);
 

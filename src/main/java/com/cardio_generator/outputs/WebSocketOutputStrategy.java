@@ -27,6 +27,8 @@ public class WebSocketOutputStrategy implements OutputStrategy {
 
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
+        //System.out.println("ok");
+        
         if (label.equals("Saturation")) {
             double temp = Double.parseDouble(data.replace("%", ""))/100;
             data = String.valueOf(temp);

@@ -53,6 +53,8 @@ public class HealthDataSimulator {
 
         parseArguments(args);
 
+        //System.out.println("ok");
+
         scheduler = Executors.newScheduledThreadPool(patientCount * 4);
 
         List<Integer> patientIds = initializePatientIds(patientCount);
@@ -100,6 +102,7 @@ public class HealthDataSimulator {
                             }
                             outputStrategy = new FileOutputStrategy(baseDirectory);
                         } else if (outputArg.startsWith("websocket:")) {
+                            System.out.println("ok");
                             try {
                                 int port = Integer.parseInt(outputArg.substring(10));
                                 // Initialize your WebSocket output strategy here
