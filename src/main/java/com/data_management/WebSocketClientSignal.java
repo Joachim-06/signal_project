@@ -9,9 +9,9 @@ public class WebSocketClientSignal extends WebSocketClient implements DataReader
     
     private DataStorage dataStorage;
 
-    public WebSocketClientSignal(URI serverUri) {
+    public WebSocketClientSignal(URI serverUri, DataStorage dataStorage) {
         super(serverUri);
-        this.dataStorage = DataStorage.getInstance();
+        this.dataStorage = dataStorage;
     }
     
     @Override

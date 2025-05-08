@@ -12,9 +12,10 @@ public class Main {
     public static void main(String[] args) throws Exception {
         URI uri = new URI("ws://localhost:8080");
         DataStorage storage = DataStorage.getInstance();
-        DataReader reader = new WebSocketClientSignal(uri);
+        DataReader reader = new WebSocketClientSignal(uri, storage);
         reader.readData();
 
+        //System.out.println("blabla");
         
         Runtime.getRuntime().addShutdownHook(new Thread(reader::stopReading));
 
